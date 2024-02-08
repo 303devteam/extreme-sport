@@ -1,56 +1,38 @@
-import React from 'react'
+import styles from '../styles/Login.module.scss'
+import { useRouter } from "next/router"
 import { useState } from 'react'
-import Head from 'next/head'
-import Link from 'next/link'
-import Image from 'next/image'
-import styles from '../styles/login.scss'
+import { Button } from '@mui/joy'
+import logo from '../public/images/logo.png'
+import Snackbar from '@mui/joy/Snackbar'
+import { ErrorOutline } from '@mui/icons-material'
 
-export default function HomePage() {
-  const [password, setPassword] = useState('');
-  const [errorMessage, setErrorMessage] = useState('');
-
-  const handlePasswordChange = (e) => {
-    setPassword(e.target.value);
-  };
-
-  const handleSubmit = (e) => {
-    e.preventDefault();
-    // Add your login logic here, such as validation and authentication
-    if (password === 'yourSecretPassword') {
-      // Successful login logic
-      alert('Login successful!');
-    } else {
-      // Failed login logic
-      setErrorMessage('Incorrect password');
-    }
-  };
-
-
+export default function Login() {
+  const router = useRouter()
+  const [password, setPassword] = useState('')
+  const [email, setEmail] = useState('')
 
   return (
     <>
-    <Head>
-      <title>Login</title>
-    </Head>
-    <div className='loginform'>
-      <h1>Login</h1>
-      <form onSubmit={handleSubmit}>
-        <div>
-          <label>Password:</label>
-          <input
-            type='password'
-            value={password}
-            onChange={handlePasswordChange}
-            required
-          />
+      <div className={styles.main}>
+        <img className={styles.logo} src={logo.src} width={100} height={100} />
+        <div className={styles.formContainer}>
+          <h1 className={styles.formHeader}>ExtremeSport Manager</h1>
+          <input onChange={(e) => setEmail(e.target.value)} className={styles.formInput} placeholder="Email" type='email' />
+          <input onChange={(e) => setPassword(e.target.value)} className={styles.formInput} placeholder="Password" type='password' />
+          <Button onClick={() => router.push('/home')} style={{width: '140px', marginTop: 'auto'}}>Log In</Button>
         </div>
-        <div>
-          <button type='submit'>Login</button>
-        </div>
-        {errorMessage && <div className='error'>{errorMessage}</div>}
-      </form>
-    </div>
-  </>
+      </div>
+
+      <Snackbar
+        anchorOrigin={{ vertical: 'bottom', horizontal: 'right' }}
+        open
+        color='danger'
+        variant='solid'
+      >
+        <ErrorOutline />
+        Password does not match!
+      </Snackbar>
+    </>
   )
 }
 

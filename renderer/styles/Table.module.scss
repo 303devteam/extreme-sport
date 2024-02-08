@@ -1,0 +1,30 @@
+.tableContainer {
+    max-height: 85%;
+    overflow-y: scroll;
+    padding: 20px 10px; 
+    .table {
+        .tableHead {
+            .tableHeadItem {
+                vertical-align: middle;
+                background-color: transparent;
+                color: white;
+                font-size: 16px;
+                text-overflow: wrap;
+                text-wrap: wrap;
+            }
+        }
+        .tableBody {
+            .tableEntry {
+                cursor: pointer;
+                &:hover {
+                    transition: 300ms ease;
+                    background-color: rgb(72, 72, 72);
+                }
+                .tableEntryText {
+                    color: white;
+                    font-size: 15px;
+                }
+            }
+        }
+    }
+}
