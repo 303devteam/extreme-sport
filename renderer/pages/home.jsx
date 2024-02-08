@@ -9,6 +9,7 @@ import Employees from '../components/employees';
 export default function Home() {
   const [active, setActive] = useState('members')
   const [content, setContent] = useState(<Members />)
+  const [user, setUser] = useState(JSON.parse(localStorage.getItem('user')))
   const router = useRouter()
 
   return(
@@ -47,8 +48,8 @@ export default function Home() {
             <p className={styles.navText}>Log Out</p>
           </div>
           <div className={styles.navItem} style={{marginTop: 'auto'}}>
-            <p className={styles.tag}>Employee</p>
-            <p className={styles.navText}>Tarik Maljanovic</p>
+            <p className={styles.tag}>{user.userType}</p>
+            <p className={styles.navText}>{user.firstName} {user.lastName}</p>
           </div>
         </div>
         <div className={styles.content}>

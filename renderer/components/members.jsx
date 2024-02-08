@@ -3,7 +3,7 @@ import tableStyles from '../styles/Table.module.scss'
 import { Table, Button, Modal, ModalDialog, ModalClose } from '@mui/joy';
 import { useState, useEffect } from 'react';
 import axios from 'axios';
-import addMemberSchema from '../validationSchemas/addMemberSchema'
+import memberSchema from '../validationSchemas/memberSchema'
 import Snackbar from '@mui/joy/Snackbar'
 import { ErrorOutline, CheckCircleOutline } from '@mui/icons-material'
 
@@ -37,7 +37,7 @@ export default function Members() {
     }, [])
 
     const handleAddMember = () => {
-        addMemberSchema.validate(memberData).then(() => {
+        memberSchema.validate(memberData).then(() => {
             axios.post('http://localhost:8000/members/addmember', memberData).then(res => {
                 setMembers([...members, res.data])
                 setAddMember(false)
@@ -71,7 +71,7 @@ export default function Members() {
     }
 
     const handleEditMember = () => {
-        addMemberSchema.validate(memberData).then(() => {
+        memberSchema.validate(memberData).then(() => {
             axios.put(`http://localhost:8000/members/updatemember/${selectedMember.id}`, memberData).then(res => {
                 setMembers(members.map(member => {
                     if(member.id === selectedMember.id) {
@@ -80,6 +80,7 @@ export default function Members() {
                     return member
                 }))
                 setEditMember(false)
+                setMemberDetails(false)
                 setSuccess({...success, editMember: true})
                 setTimeout(() => {
                     setSuccess({...success, editMember: false})
@@ -178,14 +179,18 @@ export default function Members() {
                     <ModalClose onClick={() => setMemberDetails(false)} />
                     <div className={styles.modalContent}>
                         <h1 className={styles.modalTitle}>Member Details</h1>
-                        <div className={styles.modalDetails}>
-                            <p className={styles.modalDetailItem}><strong style={{color: 'white'}}>First Name: </strong>{selectedMember.firstName}</p>
-                            <p className={styles.modalDetailItem}><strong style={{color: 'white'}}>Last Name: </strong>{selectedMember.lastName}</p>
-                            <p className={styles.modalDetailItem}><strong style={{color: 'white'}}>Email: </strong>{selectedMember.email}</p>
-                            <p className={styles.modalDetailItem}><strong style={{color: 'white'}}>Phone Number: </strong>{selectedMember.phoneNumber}</p>
-                            <p className={styles.modalDetailItem}><strong style={{color: 'white'}}>Date of Birth: </strong>{selectedMember.birthDay?.slice(0, 10)}</p>
-                            <p className={styles.modalDetailItem}><strong style={{color: 'white'}}>Address: </strong>{selectedMember.address}</p>
-                            <p className={styles.modalDetailItem}><strong style={{color: 'white'}}>City: </strong>{selectedMember.city}</p>
+                        <div style={{flexDirection: 'row', display: 'flex'}} className={styles.modalDetails}>
+                            <div className={styles.modalDetails}>
+                                <p className={styles.modalDetailItem}><strong style={{color: 'white'}}>First Name: </strong>{selectedMember.firstName}</p>
+                                <p className={styles.modalDetailItem}><strong style={{color: 'white'}}>Last Name: </strong>{selectedMember.lastName}</p>
+                                <p className={styles.modalDetailItem}><strong style={{color: 'white'}}>Email: </strong>{selectedMember.email}</p>
+                                <p className={styles.modalDetailItem}><strong style={{color: 'white'}}>Phone Number: </strong>{selectedMember.phoneNumber}</p>
+                            </div>
+                            <div className={styles.modalDetails}>
+                                <p className={styles.modalDetailItem}><strong style={{color: 'white'}}>Date of Birth: </strong>{selectedMember.birthDay?.slice(0, 10)}</p>
+                                <p className={styles.modalDetailItem}><strong style={{color: 'white'}}>Address: </strong>{selectedMember.address}</p>
+                                <p className={styles.modalDetailItem}><strong style={{color: 'white'}}>City: </strong>{selectedMember.city}</p>
+                            </div>
                         </div>
                         <h1 className={styles.modalTitle}>Member Packages</h1>
                         <div className={tableStyles.tableContainer}>
@@ -242,7 +247,7 @@ export default function Members() {
             </Modal>
             <Modal open={deleteMember}>
                 <ModalDialog className={styles.modal}>
-                    <ModalClose onClick={() => setMemberDetails(false)} />
+                    <ModalClose onClick={() => setDeleteMember(false)} />
                     <div className={styles.modalContent}>
                         <h1 className={styles.modalTitle}>Delete Member</h1>
                         <p className={styles.modalText}>Are you sure you want to delete this member?</p>
